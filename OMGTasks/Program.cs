@@ -39,7 +39,7 @@ namespace TaskExam
             return result;
         }
 
-        #region methods for solving индекс слова
+        #region methods for solving Индекс слова
 
         private static int Partition(char[] array, int start, int end)
         {
@@ -113,9 +113,52 @@ namespace TaskExam
         /// задание 2) Луноход
         public static int FindPath(int[][] gridMap, int sX, int sY, int eX, int eY, int energyAmount)
         {
-            //код алгоритма
-            return -1;
+            int[][] stepMap = MakeStepMatrix(gridMap);
+            Queue<Point> steps = new Queue<Point>();
+            steps.Enqueue(new Point(sX, sY, 0));
+
+            while (steps.Count > 0)
+            {
+                MakeStep(ref stepMap, steps.Dequeue());
+            }
+
         }
+
+        #region Methods and classes for solving Луноход
+
+        private class Point
+        {
+            public int x;
+            public int y;
+            public int stepNumber;
+
+            public Point(int x, int y, int stepNumber)
+            {
+                this.x = x;
+                this.y = y;
+                this.stepNumber = stepNumber;
+            }
+        }
+
+        private static int[][] MakeStepMatrix(int[][] gridMap)
+        {
+            int[][] stepMatrix = new int[gridMap.Length][];
+            int matrixWidth = gridMap[0].Length;
+
+            for(int i = 0; i < stepMatrix.Length; i++)
+            {
+                stepMatrix[i] = new int[matrixWidth];
+            }
+
+            return stepMatrix;
+        }
+
+        private static void MakeStep(ref int[][] stepMap, Point tempStep)
+        {
+
+        }
+
+        #endregion
 
         /// задание 3) Монетки
         public static string FormatPrettyCoins(long value, char separator)
