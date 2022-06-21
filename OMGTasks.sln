@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32602.215
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OMGTasks", "OMGTasks\OMGTasks.csproj", "{B9DCB7E0-CBD2-4635-B0DA-36C68D43A9D8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B9DCB7E0-CBD2-4635-B0DA-36C68D43A9D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9DCB7E0-CBD2-4635-B0DA-36C68D43A9D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9DCB7E0-CBD2-4635-B0DA-36C68D43A9D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9DCB7E0-CBD2-4635-B0DA-36C68D43A9D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EAA1AF5B-FC43-452C-9144-3A942CB93704}
+	EndGlobalSection
+EndGlobal
