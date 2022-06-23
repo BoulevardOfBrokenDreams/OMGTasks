@@ -8,7 +8,7 @@ namespace TaskExam
     {
         public static void Main(string[] args)
         {
-            //TestGetWordSubWords();
+            TestGetWordSubWords();
             TestFindPath();
             //TestFormatPrettyCoins();
             //FindMaxRect();
@@ -35,7 +35,7 @@ namespace TaskExam
             {
                 result.Add(CountDerivedWord(words[i], ref wordDictionary));
             }
-
+            
             return result;
         }
 
@@ -113,15 +113,22 @@ namespace TaskExam
         /// задание 2) Луноход
         public static int FindPath(int[][] gridMap, int sX, int sY, int eX, int eY, int energyAmount)
         {
-            int[][] stepMap = MakeStepMatrix(gridMap);
-            Queue<Point> steps = new Queue<Point>();
+            var stepMap = MakeStepMatrix(gridMap);
+            var reversedGridMap = ReverseMatrix(gridMap);
+            var steps = new Queue<Point>();
             steps.Enqueue(new Point(sX, sY, 0));
 
             while (steps.Count > 0)
             {
-                MakeStep(ref stepMap, steps.Dequeue());
+                MakeStep(reversedGridMap, ref stepMap, ref steps);
             }
 
+            if(stepMap[eY][eX] >= energyAmount || stepMap[eY][eX] == 0)
+            {
+                return -1;
+            }
+
+            return stepMap[eY][eX];
         }
 
         #region Methods and classes for solving Луноход
@@ -153,9 +160,51 @@ namespace TaskExam
             return stepMatrix;
         }
 
-        private static void MakeStep(ref int[][] stepMap, Point tempStep)
+        private static int[][] ReverseMatrix(int[][] gridMap)
         {
+            var matrix = new int[gridMap.Length][];
+            
+            for(int i = gridMap.Length - 1; i >= 0; i--)
+            {
+                matrix[gridMap.Length - 1 - i] = gridMap[i];
+            }
 
+            return matrix;
+        }
+
+        private static void MakeStep(int[][] gridMap, ref int[][] stepMap, ref Queue<Point> steps)
+        {
+            var mapHeight = gridMap.Length;
+            var mapWidth = gridMap[0].Length;
+            var tempStep = steps.Dequeue();
+
+            if (tempStep.x + 1 < mapWidth && gridMap[tempStep.y][tempStep.x + 1] != 0  
+                && (stepMap[tempStep.y][tempStep.x + 1] > tempStep.stepNumber || stepMap[tempStep.y][tempStep.x + 1] == 0))
+            {
+                stepMap[tempStep.y][tempStep.x + 1] = tempStep.stepNumber + 1;
+                steps.Enqueue(new Point(tempStep.x + 1, tempStep.y, tempStep.stepNumber + 1));
+            }
+
+            if (tempStep.x - 1 > 0 && gridMap[tempStep.y][tempStep.x - 1] != 0
+                && (stepMap[tempStep.y][tempStep.x - 1] > tempStep.stepNumber || stepMap[tempStep.y][tempStep.x - 1] == 0))
+            {
+                stepMap[tempStep.y][tempStep.x - 1] = tempStep.stepNumber + 1;
+                steps.Enqueue(new Point(tempStep.x - 1, tempStep.y, tempStep.stepNumber + 1));
+            }
+
+            if (tempStep.y + 1 < mapHeight && gridMap[tempStep.y + 1][tempStep.x] != 0
+                && (stepMap[tempStep.y + 1][tempStep.x] > tempStep.stepNumber || stepMap[tempStep.y + 1][tempStep.x] == 0))
+            {
+                stepMap[tempStep.y + 1][tempStep.x] = tempStep.stepNumber + 1;
+                steps.Enqueue(new Point(tempStep.x, tempStep.y + 1, tempStep.stepNumber + 1));
+            }
+
+            if (tempStep.y - 1 > 0 && gridMap[tempStep.y - 1][tempStep.x] != 0
+                && (stepMap[tempStep.y - 1][tempStep.x] > tempStep.stepNumber || stepMap[tempStep.y - 1][tempStep.x] == 0))
+            {
+                stepMap[tempStep.y - 1][tempStep.x] = tempStep.stepNumber + 1;
+                steps.Enqueue(new Point(tempStep.x, tempStep.y - 1, tempStep.stepNumber + 1));
+            }
         }
 
         #endregion
