@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace TaskExam
 {
@@ -10,7 +11,9 @@ namespace TaskExam
         {
             TestGetWordSubWords();
             TestFindPath();
-            //TestFormatPrettyCoins();
+            TestFindPathPlus();
+            TestFormatPrettyCoins();
+            TestFormatPrettyCoinsPlus();
             //FindMaxRect();
 
             Console.WriteLine("All Test completed!");
@@ -123,7 +126,7 @@ namespace TaskExam
                 MakeStep(reversedGridMap, ref stepMap, ref steps);
             }
 
-            if(stepMap[eY][eX] >= energyAmount || stepMap[eY][eX] == 0)
+            if(stepMap[eY][eX] > energyAmount || stepMap[eY][eX] == 0)
             {
                 return -1;
             }
@@ -210,11 +213,59 @@ namespace TaskExam
         #endregion
 
         /// задание 3) Монетки
+        // в задании нигде не сказано про округление => функция не округляет
         public static string FormatPrettyCoins(long value, char separator)
         {
-            //код алгоритма
+            var stringValue = value.ToString();
+            switch (CheckValue(value))
+            {
+                case 'M':
+                    return MakePrettyCoin(stringValue.Substring(0, stringValue.Length - 6), separator, 'M');
+                case 'K':
+                    return MakePrettyCoin(stringValue.Substring(0, stringValue.Length - 3), separator, 'K');
+                default:
+                    return MakePrettyCoin(stringValue, separator);
+            }
+
             return string.Empty;
         }
+
+        #region Methods for solving Монетки
+
+        private static char CheckValue(long value)
+        {
+            if(value > 10000000) { return 'M'; }
+            if(value > 100000) { return 'K'; }
+            return 'L';
+        }
+
+        private static string MakePrettyCoin(string shortValue, char separator, char letter)
+        {
+            var valueLen = shortValue.Length;
+            if(valueLen <= 3)
+            {
+                return shortValue + letter.ToString();
+            }
+            else
+            {
+                return shortValue.Substring(0, valueLen % 3) + separator.ToString() + shortValue.Substring(valueLen % 3, 3) + letter.ToString();
+            }
+        }
+
+        private static string MakePrettyCoin(string shortValue, char separator)
+        {
+            var valueLen = shortValue.Length;
+            if (valueLen <= 3)
+            {
+                return shortValue;
+            }
+            else
+            {
+                return shortValue.Substring(0, valueLen - 3) + separator.ToString() + shortValue.Substring(valueLen - 3, 3);
+            }
+        }
+
+        #endregion
 
         /// задание 4) Самый большой прямоугольник на гистограмме
         public static int FindMaxRect(List<int> heights)
@@ -255,12 +306,45 @@ namespace TaskExam
             AssertEqual(FindPath(gridA, 0, 0, 0, 5, 3), -1);
         }
 
+        private static void TestFindPathPlus()
+        {
+            int[][] gridA =
+            {
+                new[] {1, 1, 1, 0, 1, 1, 1},
+                new[] {1, 1, 1, 0, 1, 0, 1},
+                new[] {1, 1, 1, 0, 0, 0, 1},
+                new[] {1, 1, 1, 1, 1, 1, 1},
+                new[] {1, 1, 1, 1, 1, 1, 1},
+                new[] {1, 1, 1, 1, 1, 1, 1},
+            };
+
+            AssertEqual(FindPath(gridA, 0, 0, 4, 4, 14), 14);
+            AssertEqual(FindPath(gridA, 0, 0, 4, 4, 13), -1);
+        }
+
         private static void TestFormatPrettyCoins()
         {
             AssertEqual(FormatPrettyCoins(10, ' '), "10");
             AssertEqual(FormatPrettyCoins(1233, ' '), "1 233");
             AssertEqual(FormatPrettyCoins(1717310, ' '), "1 717K");
             AssertEqual(FormatPrettyCoins(7172343310, ' '), "7 172M");
+        }
+
+        private static void TestFormatPrettyCoinsPlus()
+        {
+            AssertEqual(FormatPrettyCoins(0, '_'), "0");
+            AssertEqual(FormatPrettyCoins(10, '_'), "10");
+            AssertEqual(FormatPrettyCoins(100, '_'), "100");
+            AssertEqual(FormatPrettyCoins(1000, '_'), "1_000");
+            AssertEqual(FormatPrettyCoins(10000, '_'), "10_000");
+            AssertEqual(FormatPrettyCoins(100000, '_'), "100_000");
+            AssertEqual(FormatPrettyCoins(100001, '_'), "100K");
+            AssertEqual(FormatPrettyCoins(1000000, '_'), "1_000K");
+            AssertEqual(FormatPrettyCoins(10000000, '_'), "10_000K");
+            AssertEqual(FormatPrettyCoins(10000001, '_'), "10M");
+            AssertEqual(FormatPrettyCoins(100000000, '_'), "100M");
+            AssertEqual(FormatPrettyCoins(1000000000, '_'), "1_000M");
+            AssertEqual(FormatPrettyCoins(10000000000, '_'), "10_000M");
         }
 
         private static void FindMaxRect()
