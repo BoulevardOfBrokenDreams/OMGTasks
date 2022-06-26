@@ -14,7 +14,7 @@ namespace TaskExam
             TestFindPathPlus();
             TestFormatPrettyCoins();
             TestFormatPrettyCoinsPlus();
-            //FindMaxRect();
+            FindMaxRect();
 
             Console.WriteLine("All Test completed!");
         }
@@ -270,9 +270,70 @@ namespace TaskExam
         /// задание 4) Самый большой прямоугольник на гистограмме
         public static int FindMaxRect(List<int> heights)
         {
-            //algorithm
-            return 0;
+            int minHeight = 0, maxHeight = 0, maxRect = 0;
+
+            ExtremumSearch(heights, ref minHeight, ref maxHeight);
+
+            var tempRect = 0;
+            for(int i = minHeight; i <= maxHeight; i++)
+            {
+                tempRect = RectSearch(heights, i);
+
+                if (tempRect > maxRect)
+                {
+                    maxRect = tempRect;
+                }
+            }
+
+            return maxRect;
         }
+
+        #region Methods for solving Самый большой прямоугольник на гистограмме
+
+        private static void ExtremumSearch(List<int> heights, ref int minHeight, ref int maxHeight)
+        {
+            minHeight = heights[0];
+            maxHeight = heights[0];
+
+            for(int i = 0; i < heights.Count; i++)
+            {
+                if(heights[i] < minHeight)
+                {
+                    minHeight = heights[i];
+                }
+                if(heights[i] > maxHeight)
+                {
+                    maxHeight = heights[i];
+                }
+            }
+        }
+
+        private static int RectSearch(List<int> heights, int tempHeight)
+        {
+            int bestRect = 0;
+            var tempRect = 0;
+            for (int i = 0; i < heights.Count; i++)
+            {
+                if(heights[i] >= tempHeight)
+                {
+                    tempRect += tempHeight;
+                }
+
+                if(tempRect > bestRect)
+                {
+                    bestRect = tempRect;
+                }
+
+                if (heights[i] < tempHeight)
+                {
+                    tempRect = 0;
+                }
+            }
+
+            return bestRect;
+        }
+
+        #endregion
 
         /// Тесты (можно/нужно добавлять свои тесты) 
 
@@ -352,6 +413,9 @@ namespace TaskExam
             AssertEqual(FindMaxRect(new List<int> { 1, 2, 3, 4, 4, 4, 5, 4, 6 }), 24);
             AssertEqual(FindMaxRect(new List<int> { 1, 2, 3, 5, 5, 4, 2, 4, 6 }), 16);
             AssertEqual(FindMaxRect(new List<int> { 8, 9, 3, 5, 5, 2, 3, 4, 6, 1, 6 }), 18);
+
+            //plus
+            AssertEqual(FindMaxRect(new List<int> { 1, 2, 3, 3, 3, 1, 3, 3, 3, 3 }), 12);
         }
 
         /// Тестирующая система, лучше не трогать этот код
@@ -411,5 +475,4 @@ namespace TaskExam
         }
 
     }
-
 }
